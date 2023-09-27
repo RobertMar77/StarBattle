@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Star Battle Client</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <div id="main-container">
+            <!-- Game view -->
+            <div id="game-view-container">
+                <div id="board-container">
+                    <h1 id="board-header">Game Title</h1>
+                    <div id="canvas-container">
+                        <canvas id="game-canvas" width="500" height="500"></canvas>
+                    </div>
+                </div>
+
+                <div id="controls-container">
+                    <h2>Controls here</h2>
+                </div>
+            </div><!-- game-view-container -->
+        </div><!-- main-container -->
+
+        <!-- Load our JS as a ES6 module -->
+        <script type="module" src="js/main.js"></script>
+    </body>
+</html>
