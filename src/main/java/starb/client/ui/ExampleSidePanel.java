@@ -18,10 +18,10 @@ public class ExampleSidePanel extends VBox {
         );
         this.setPadding(new Insets(10,10,10,10));
 
-        Button b1 = new Button("Button 1");
-        Button b2 = new Button("Button 2");
-        Button b3 = new Button("Button 3");
-        Label label = new Label("Label:");
+        Button b1 = new Button("Menu");
+        Button b2 = new Button("View Solution");
+        Button b3 = new Button("Mark type");
+        Label label = new Label("Auto Mark type");
         TextField textField = new TextField();
         TextArea textArea = new TextArea();
 

@@ -3,21 +3,21 @@ package starb.client.ui;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 import java.io.File;
 
-/**
- * A GUI component demonstrating how to use JavaFX GraphicsContext to draw shapes and
- * images.
- */
-public class ExampleDrawingPanel extends StackPane{
+public class DrawingPanel extends VBox{
 
-    private static final int WIDTH = 500;
-    private static final int HEIGHT = 500;
+    private static final int WIDTH = 400;
+    private static final int HEIGHT = 400;
 
     private static final File STAR_IMAGE_FILE = new File("image/star_gold.png");
     private Image starImage;
@@ -32,8 +32,10 @@ public class ExampleDrawingPanel extends StackPane{
     private int cols = 10;
     private Point2D gridUpperLeft = new Point2D(15,15);
 
-    public ExampleDrawingPanel() {
+    public DrawingPanel(){
         canvas = new Canvas(WIDTH, HEIGHT);
+        HBox hbox1= new HBox(50);
+        HBox hbox2 = new HBox(10);
 
         // Load the image files
         try {
@@ -45,11 +47,19 @@ public class ExampleDrawingPanel extends StackPane{
             System.err.println(e.getMessage());
             throw new RuntimeException(message);
         }
-
-        this.getChildren().add(canvas);
+        Label time = new Label("Time");
+        Label Ftime = new Label("Fastest Time");
+        Button TimeSl = new Button("Time solve");
+        Button Rest = new Button("Rest");
+        hbox1.getChildren().addAll(time, Ftime);
+        hbox2.getChildren().addAll(TimeSl, Rest);
+        this.getChildren().addAll(hbox1, canvas, hbox2);
         canvas.setOnMouseClicked( e -> mouseClicked(e));
         draw();
+
     }
+
+
 
     public void draw() {
         GraphicsContext g = canvas.getGraphicsContext2D();
@@ -97,13 +107,12 @@ public class ExampleDrawingPanel extends StackPane{
                 gridUpperLeft.getY(),
                 spotImage.getWidth() * scale, spotImage.getHeight() * scale);
     }
-
     private void drawStar( int row, int col, GraphicsContext g ) {
         g.drawImage(starImage,
                 gridUpperLeft.getX() + row * cellSize,
                 gridUpperLeft.getY() + col * cellSize,
                 cellSize, cellSize
-                );
+        );
     }
 
     private void mouseClicked(MouseEvent e) {
