@@ -1,4 +1,4 @@
-package starb.server;
+package starb.client;
 
 public class Puzzle {
     private int[][] board;
