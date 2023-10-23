@@ -1,9 +1,9 @@
 package starb.client;
 
 public class Puzzle {
-    private int[][] board;
-    private int[][] answer;
-    private int[][] region;
+    private static int[][] board;
+    private static int[][] answer;
+    private static int[][] region;
 
 
 
