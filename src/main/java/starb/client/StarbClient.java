@@ -21,7 +21,7 @@ public class StarbClient extends Application {
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         primaryStage.setScene( new Scene(new starb.client.ui.GameScene()));
-        primaryStage.setTitle("Example Client");
+        primaryStage.setTitle("Star Game");
         primaryStage.show();
     }
 

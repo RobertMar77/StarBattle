@@ -1,5 +1,6 @@
 package starb.client.ui;
 
+import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -12,8 +13,8 @@ import javafx.scene.paint.Color;
 public class MenuPanel extends HBox {
 
     public MenuPanel() {
-        Label label = new Label("USERNAME: ");
-        TextField textField = new TextField();
-        this.getChildren().addAll(label, textField);
+        Label label = new Label("WELCOME TO STAR GAME");
+        this.setAlignment(Pos.CENTER);
+        this.getChildren().addAll(label);
     }
 }

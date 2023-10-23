@@ -16,8 +16,8 @@ import java.io.File;
 
 public class DrawingPanel extends VBox{
 
-    private static final int WIDTH = 400;
-    private static final int HEIGHT = 400;
+    private static final int WIDTH = 500;
+    private static final int HEIGHT = 500;
 
     private static final File STAR_IMAGE_FILE = new File("image/star_gold.png");
     private Image starImage;
@@ -31,6 +31,7 @@ public class DrawingPanel extends VBox{
     private int rows = 10;
     private int cols = 10;
     private Point2D gridUpperLeft = new Point2D(15,15);
+    GraphicsContext g;
 
     public DrawingPanel(){
         canvas = new Canvas(WIDTH, HEIGHT);
@@ -62,7 +63,7 @@ public class DrawingPanel extends VBox{
 
 
     public void draw() {
-        GraphicsContext g = canvas.getGraphicsContext2D();
+        g = canvas.getGraphicsContext2D();
         g.setFill(Color.BLACK);
 
         // Example grid
@@ -117,5 +118,6 @@ public class DrawingPanel extends VBox{
 
     private void mouseClicked(MouseEvent e) {
         System.out.printf("Click: (%d, %d)%n", (int)e.getX(), (int)e.getY());
+        drawStar((int)e.getY()/40, (int)e.getX()/40, g);
     }
 }

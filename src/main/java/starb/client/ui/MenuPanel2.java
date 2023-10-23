@@ -1,5 +1,6 @@
 package starb.client.ui;
 
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,6 +15,7 @@ public class MenuPanel2  extends HBox {
    public MenuPanel2() {
        Button b1 = new Button("PUZZLES");
        Button play = new Button("PLAY");
+       this.setAlignment(Pos.CENTER);
        this.getChildren().addAll(b1, play);
 
        play.setOnAction(e -> {
