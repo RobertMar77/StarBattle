@@ -22,8 +22,9 @@ public class DrawingPanel extends VBox{
     private static final File STAR_IMAGE_FILE = new File("image/star_gold.png");
     private Image starImage;
     private static final File SPOT_IMAGE_FILE = new File("image/spot_the_cow.png");
+    private static final File DOT_IMAGE_FILE = new File("image/star_black.png");
     private Image spotImage;
-
+    private Image dotImage;
     private Canvas canvas;
 
     // Grid dimensions and location
@@ -43,6 +44,7 @@ public class DrawingPanel extends VBox{
         try {
             starImage = new Image(STAR_IMAGE_FILE.toURI().toURL().toString());
             spotImage = new Image(SPOT_IMAGE_FILE.toURI().toURL().toString());
+            dotImage= new Image(DOT_IMAGE_FILE.toURI().toURL().toString());
         } catch(Exception e) {
             String message = "Unable to load image: " + STAR_IMAGE_FILE;
             System.err.println(message);
@@ -98,9 +100,9 @@ public class DrawingPanel extends VBox{
         g.strokeLine(x1, y1, x2, y2);
 
         // Draw stars in a few cells of the grid
-        drawStar( 3, 4, g );
-        drawStar( 1, 1, g );
-        drawStar( 0, 2, g );
+        //drawStar( 3, 4, g );
+       // drawStar( 1, 1, g );
+        //drawStar( 0, 2, g );
 
         // Draw the cow, just for fun.  This is demonstrating how you can draw any custom
         // image.  Remove this... :)
@@ -118,18 +120,26 @@ public class DrawingPanel extends VBox{
     }
 
     private void drawDot(int row, int col, GraphicsContext g){
-        g.drawImage(spotImage,
+        g.drawImage(dotImage,
                 gridUpperLeft.getX() + row * cellSize,
                 gridUpperLeft.getY() + col * cellSize,
                 cellSize, cellSize
         );
     }
 
-    private void clearStar(int row, int col, GraphicsContext g){
-        g.drawImage(spotImage,
+    private void clearIm(int row, int col, GraphicsContext g){
+        g.clearRect(
                 gridUpperLeft.getX() + row * cellSize,
                 gridUpperLeft.getY() + col * cellSize,
                 cellSize, cellSize
+        );
+        g.setLineWidth(1.0);
+        g.setStroke(Color.BLACK);
+        g.strokeRect(
+                gridUpperLeft.getX() + col * cellSize,
+                gridUpperLeft.getY() + row * cellSize,
+                cellSize,
+                cellSize
         );
     }
 
@@ -146,11 +156,13 @@ public class DrawingPanel extends VBox{
             // Draw the spot at the calculated row and column
             boardd[Row][Col] = 1;
         } else if (boardd[Row][Col] == 1) {
+            clearIm(Col,Row,g);
             // Draw the star at the calculated row and column
             drawStar(Col, Row, g);
             boardd[Row][Col] = 2;
         }
         else if(boardd[Row][Col] == 2){
+            clearIm(Col,Row,g);
             boardd[Row][Col] = 0;
 
         }
