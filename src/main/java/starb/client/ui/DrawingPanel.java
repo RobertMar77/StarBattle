@@ -35,6 +35,19 @@ public class DrawingPanel extends VBox{
     GraphicsContext g;
     public int[][] boardd = new int[10][10];
 
+    private final int[][] layout = {
+            {1, 1, 1, 1, 1, 1, 1, 1, 2, 2},
+            {1, 1, 1, 1, 1, 1, 5, 1, 2, 2},
+            {3, 4, 4, 4, 1, 5, 5, 5, 2, 2},
+            {3, 3, 3, 3, 6, 7, 7, 5, 2, 2},
+            {3, 3, 3, 6, 6, 6, 7, 7, 2, 2},
+            {3, 3, 8, 6, 6, 6, 7, 7, 2, 2},
+            {3, 3, 8, 8, 8, 7, 7, 7, 9, 2},
+            {3, 3, 3, 3, 3, 3, 7, 7, 9, 2},
+            {3, 10, 10, 10, 10, 10, 10, 10, 9, 9},
+            {10, 10, 10, 10, 10, 10, 10, 10, 10, 9}
+    };
+
     public DrawingPanel(){
         canvas = new Canvas(WIDTH, HEIGHT);
         HBox hbox1= new HBox(50);
@@ -89,15 +102,17 @@ public class DrawingPanel extends VBox{
             g.lineTo( x2, y2 );
         }
         g.stroke();
+        g.closePath();
 
+        drawLayout(g);
         // Draw a thicker line, left side of cells in column
-        g.setLineWidth(5.0);
+        /*g.setLineWidth(5.0);
         int column = 1, startCellY = 1, endCellY = 3;
         double x1 = column * cellSize + gridUpperLeft.getX();
         double y1 = startCellY * cellSize + gridUpperLeft.getY();
         double x2 = x1;
         double y2 = (endCellY + 1) * cellSize + gridUpperLeft.getY();
-        g.strokeLine(x1, y1, x2, y2);
+        g.strokeLine(x1, y1, x2, y2);*/
 
         // Draw stars in a few cells of the grid
         //drawStar( 3, 4, g );
@@ -111,6 +126,40 @@ public class DrawingPanel extends VBox{
                 gridUpperLeft.getY(),
                 spotImage.getWidth() * scale, spotImage.getHeight() * scale);
     }
+
+    private void drawLayout(GraphicsContext g) {
+        g.beginPath();
+        g.setLineWidth(5.0);
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                int curr = layout[j][i];
+
+                if (i > 0 && curr != layout[j][i - 1]) { // Draw line to the left
+                    g.moveTo(i * cellSize + gridUpperLeft.getX(), j * cellSize + gridUpperLeft.getY());
+                    g.lineTo(i * cellSize + gridUpperLeft.getX(), (j + 1) * cellSize + gridUpperLeft.getY());
+                }
+
+                if (i < 9 && curr != layout[j][i + 1]) { // Draw line to the right
+                    g.moveTo((i + 1) * cellSize + gridUpperLeft.getX(), j * cellSize + gridUpperLeft.getY());
+                    g.lineTo((i + 1) * cellSize + gridUpperLeft.getX(), (j + 1) * cellSize + gridUpperLeft.getY());
+                }
+
+                if (j > 0 && curr != layout[j - 1][i]) { // Draw line above
+                    g.moveTo(i * cellSize + gridUpperLeft.getX(), j * cellSize + gridUpperLeft.getY());
+                    g.lineTo((i + 1) * cellSize + gridUpperLeft.getX(), j * cellSize + gridUpperLeft.getY());
+                }
+
+                if (j < 9 && curr != layout[j + 1][i]) { // Draw line below
+                    g.moveTo(i * cellSize + gridUpperLeft.getX(), (j + 1) * cellSize + gridUpperLeft.getY());
+                    g.lineTo((i + 1) * cellSize + gridUpperLeft.getX(), (j + 1) * cellSize + gridUpperLeft.getY());
+                }
+            }
+        }
+        g.closePath();
+        g.stroke();
+    }
+
+
     private void drawStar( int row, int col, GraphicsContext g ) {
         g.drawImage(starImage,
                 gridUpperLeft.getX() + row * cellSize,
@@ -128,19 +177,24 @@ public class DrawingPanel extends VBox{
     }
 
     private void clearIm(int row, int col, GraphicsContext g){
+        // Clear the contents of the grid cell
         g.clearRect(
-                gridUpperLeft.getX() + row * cellSize,
-                gridUpperLeft.getY() + col * cellSize,
-                cellSize, cellSize
+                gridUpperLeft.getX() + col * cellSize,
+                gridUpperLeft.getY() + row * cellSize,
+                cellSize,
+                cellSize
         );
+        g.setFill(Color.BLACK);
+
         g.setLineWidth(1.0);
-        g.setStroke(Color.BLACK);
         g.strokeRect(
                 gridUpperLeft.getX() + col * cellSize,
                 gridUpperLeft.getY() + row * cellSize,
                 cellSize,
                 cellSize
         );
+        drawLayout(g);
+
     }
 
     private void mouseClicked(MouseEvent e) {
@@ -161,7 +215,7 @@ public class DrawingPanel extends VBox{
             drawStar(Col, Row, g);
             boardd[Row][Col] = 2;
         }
-        else if(boardd[Row][Col] == 2){
+        else{
             clearIm(Col,Row,g);
             boardd[Row][Col] = 0;
 
