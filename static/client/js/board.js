@@ -171,22 +171,44 @@ export class Board {
     }
 
     canDrawStar(x, y) {
+        return this.starsInSection(x, y) < 2
+               && this.starsInRow(x, y) < 2
+               && this.starsInColumn(x, y) < 2;
+    }
+
+    starsInSection(x, y) {
         const curr = this.layout[y][x];
         let numStarsInSection = 0;
         for (let i = 0; i < 10; i++) {
             for (let j = 0; j < 10; j++) {
                 if (this.layout[j][i] == curr) {
-                    if (this.stars[j][i] == true) {
+                    if (this.stars[j][i]) {
                         numStarsInSection++;
-                        if (numStarsInSection > 1) {
-                            console.log("Too many stars!");
-                            return false;
-                        }
                     }
                 }
             }
         }
-        return true;
+        return numStarsInSection;
+    }
+
+    starsInRow(x, y) {
+        let numStarsInRow = 0;
+        for (let i = 0; i < 10; i++) {
+            if (this.stars[y][i]) {
+                numStarsInRow++;
+            }
+        }
+        return numStarsInRow;
+    }
+
+    starsInColumn(x, y) {
+        let numStarsInColumn = 0;
+        for (let j = 0; j < 10; j++) {
+            if (this.stars[j][x]) {
+                numStarsInColumn++;
+            }
+        }
+        return numStarsInColumn;
     }
 
     /**
