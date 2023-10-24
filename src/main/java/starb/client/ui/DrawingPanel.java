@@ -32,6 +32,7 @@ public class DrawingPanel extends VBox{
     private int cols = 10;
     private Point2D gridUpperLeft = new Point2D(15,15);
     GraphicsContext g;
+    public int[][] boardd = new int[10][10];
 
     public DrawingPanel(){
         canvas = new Canvas(WIDTH, HEIGHT);
@@ -116,6 +117,22 @@ public class DrawingPanel extends VBox{
         );
     }
 
+    private void drawDot(int row, int col, GraphicsContext g){
+        g.drawImage(spotImage,
+                gridUpperLeft.getX() + row * cellSize,
+                gridUpperLeft.getY() + col * cellSize,
+                cellSize, cellSize
+        );
+    }
+
+    private void clearStar(int row, int col, GraphicsContext g){
+        g.drawImage(spotImage,
+                gridUpperLeft.getX() + row * cellSize,
+                gridUpperLeft.getY() + col * cellSize,
+                cellSize, cellSize
+        );
+    }
+
     private void mouseClicked(MouseEvent e) {
         double X = e.getX();
         double Y = e.getY();
@@ -124,8 +141,19 @@ public class DrawingPanel extends VBox{
         int Row = (int) ((Y - gridUpperLeft.getY()) / 40);
         int Col = (int) ((X - gridUpperLeft.getX()) / 40);
 
+        if(boardd[Row][Col] == 0){
+            drawDot(Col, Row, g);
+            // Draw the spot at the calculated row and column
+            boardd[Row][Col] = 1;
+        } else if (boardd[Row][Col] == 1) {
+            // Draw the star at the calculated row and column
+            drawStar(Col, Row, g);
+            boardd[Row][Col] = 2;
+        }
+        else if(boardd[Row][Col] == 2){
+            boardd[Row][Col] = 0;
 
-        // Draw the star at the calculated row and column
-        drawStar(Col, Row, g);
+        }
+
     }
 }
