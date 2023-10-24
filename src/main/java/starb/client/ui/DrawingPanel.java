@@ -117,7 +117,15 @@ public class DrawingPanel extends VBox{
     }
 
     private void mouseClicked(MouseEvent e) {
-        System.out.printf("Click: (%d, %d)%n", (int)e.getX(), (int)e.getY());
-        drawStar((int)e.getY()/40, (int)e.getX()/40, g);
+        double X = e.getX();
+        double Y = e.getY();
+
+        // Calculate the row and column from mouse coordinates
+        int Row = (int) ((Y - gridUpperLeft.getY()) / 40);
+        int Col = (int) ((X - gridUpperLeft.getX()) / 40);
+
+
+        // Draw the star at the calculated row and column
+        drawStar(Col, Row, g);
     }
 }
