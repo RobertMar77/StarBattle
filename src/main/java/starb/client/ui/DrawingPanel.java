@@ -1,6 +1,7 @@
 package starb.client.ui;
 
 import javafx.geometry.Point2D;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -11,11 +12,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import starb.client.Puzzle;
 import starb.server.FakeServ;
 
 import java.io.File;
 import java.util.Arrays;
+
+import static starb.client.ui.WinScene.Next;
 
 public class DrawingPanel extends VBox{
 
@@ -48,7 +52,7 @@ public class DrawingPanel extends VBox{
     private final int[][] answer = serv.getAnswer(0);
     private Puzzle userPuzzle = new Puzzle(answer, layout);
 
-
+    public static Stage st = new Stage();
 
     public DrawingPanel(){
         canvas = new Canvas(WIDTH, HEIGHT);
@@ -186,17 +190,8 @@ public class DrawingPanel extends VBox{
         if(userPuzzle.isCorrect()){             //add Win popup
             System.out.println("correct");
 
-
-
-
-
-
-            //add Win here
-
-
-
-
-
+            st.setScene(new Scene(new WinScene()));
+            st.show();
         }
     }
 
@@ -213,8 +208,8 @@ public class DrawingPanel extends VBox{
     private void clearIm(int row, int col, GraphicsContext g){
         // Clear the contents of the grid cell
         g.clearRect(
-                gridUpperLeft.getX() + col * cellSize,
-                gridUpperLeft.getY() + row * cellSize,
+                gridUpperLeft.getX() + row * cellSize,
+                gridUpperLeft.getY() + col * cellSize,
                 cellSize,
                 cellSize
         );
@@ -222,8 +217,8 @@ public class DrawingPanel extends VBox{
 
         g.setLineWidth(1.0);
         g.strokeRect(
-                gridUpperLeft.getX() + col * cellSize,
-                gridUpperLeft.getY() + row * cellSize,
+                gridUpperLeft.getX() + row * cellSize,
+                gridUpperLeft.getY() + col * cellSize,
                 cellSize,
                 cellSize
         );
