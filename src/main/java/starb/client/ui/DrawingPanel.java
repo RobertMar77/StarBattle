@@ -11,13 +11,19 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import starb.client.Puzzle;
+import starb.server.FakeServ;
 
 import java.io.File;
+import java.util.Arrays;
 
 public class DrawingPanel extends VBox{
 
     private static final int WIDTH = 500;
     private static final int HEIGHT = 500;
+
+    private static final File STAR_RED_IMAGE_FILE = new File("image/star_red.png");
+    private Image star_redImage;
 
     private static final File STAR_IMAGE_FILE = new File("image/star_gold.png");
     private Image starImage;
@@ -35,18 +41,14 @@ public class DrawingPanel extends VBox{
     GraphicsContext g;
     public int[][] boardd = new int[10][10];
 
-    private final int[][] layout = {
-            {1, 1, 1, 1, 1, 1, 1, 1, 2, 2},
-            {1, 1, 1, 1, 1, 1, 5, 1, 2, 2},
-            {3, 4, 4, 4, 1, 5, 5, 5, 2, 2},
-            {3, 3, 3, 3, 6, 7, 7, 5, 2, 2},
-            {3, 3, 3, 6, 6, 6, 7, 7, 2, 2},
-            {3, 3, 8, 6, 6, 6, 7, 7, 2, 2},
-            {3, 3, 8, 8, 8, 7, 7, 7, 9, 2},
-            {3, 3, 3, 3, 3, 3, 7, 7, 9, 2},
-            {3, 10, 10, 10, 10, 10, 10, 10, 9, 9},
-            {10, 10, 10, 10, 10, 10, 10, 10, 10, 9}
-    };
+
+
+    private final FakeServ serv = new FakeServ();
+    private final int[][] layout = serv.getLayout(0);       //the int will be the puzzle number we will change later
+    private final int[][] answer = serv.getAnswer(0);
+    private Puzzle userPuzzle = new Puzzle(answer, layout);
+
+
 
     public DrawingPanel(){
         canvas = new Canvas(WIDTH, HEIGHT);
@@ -58,6 +60,7 @@ public class DrawingPanel extends VBox{
             starImage = new Image(STAR_IMAGE_FILE.toURI().toURL().toString());
             spotImage = new Image(SPOT_IMAGE_FILE.toURI().toURL().toString());
             dotImage= new Image(DOT_IMAGE_FILE.toURI().toURL().toString());
+            star_redImage= new Image(STAR_RED_IMAGE_FILE.toURI().toURL().toString());
         } catch(Exception e) {
             String message = "Unable to load image: " + STAR_IMAGE_FILE;
             System.err.println(message);
@@ -161,11 +164,40 @@ public class DrawingPanel extends VBox{
 
 
     private void drawStar( int row, int col, GraphicsContext g ) {
-        g.drawImage(starImage,
-                gridUpperLeft.getX() + row * cellSize,
-                gridUpperLeft.getY() + col * cellSize,
-                cellSize, cellSize
-        );
+        boolean isStar = userPuzzle.placeStar(col, row);
+
+        System.out.println(isStar);
+
+        if(isStar){     //star placement not illegal
+            g.drawImage(starImage,
+                    gridUpperLeft.getX() + row * cellSize,
+                    gridUpperLeft.getY() + col * cellSize,
+                    cellSize, cellSize
+            );
+        }
+        else{
+            g.drawImage(star_redImage,
+                    gridUpperLeft.getX() + row * cellSize,
+                    gridUpperLeft.getY() + col * cellSize,
+                    cellSize, cellSize
+            );
+        }
+
+        if(userPuzzle.isCorrect()){             //add Win popup
+            System.out.println("correct");
+
+
+
+
+
+
+            //add Win here
+
+
+
+
+
+        }
     }
 
     private void drawDot(int row, int col, GraphicsContext g){

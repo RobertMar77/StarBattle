@@ -28,6 +28,24 @@ public class Puzzle {
     public boolean placeStar(int x, int y){
         board[x][y]= 1;
 
+        //check for adjacent stars
+        int[] adjX = {-1,-1,-1,0,0,1,1,1};
+        int[] adjY = {-1,0,1,-1,1,-1,0,1};
+
+        for(int i=0; i<8; i++){
+            int aX = x + adjX[i];
+            int aY = y + adjY[i];
+
+            if(aX >=0 && aX < 10 && aY >=0 && aY < 10){
+                if(board[aX][aY]==1){
+                    return false;
+                }
+            }
+        }
+
+
+
+        //check regions columns and rows
         int currReg= region[x][y];
         int legalReg = 0;
 
@@ -38,21 +56,24 @@ public class Puzzle {
             for(int j=0; j<10; j++){
                 if(region[i][j] == currReg && board[i][j] == 1){
                     legalReg++;
+                    System.out.println("reg:"+legalReg);
                 }
-                if(board[x][j] == 1){
+                if(board[x][j] == 1 && i == x){
                     legalRow++;
+                    System.out.println("row:"+legalRow);
                 }
             }
             if(board[i][y] == 1){
                 legalCol++;
+                System.out.println("col:"+legalCol);
             }
         }
 
-        if(legalReg <= 2 && legalCol ==1 && legalRow ==1){ //2 per region 1 star per row/col
+
+        if(legalReg <= 2 && legalCol <=2 && legalRow <=2){ //2 per region 2 star per row/col
             return true;
         }
         else{
-            board[x][y]= 0;
             return false;
         }
     }
