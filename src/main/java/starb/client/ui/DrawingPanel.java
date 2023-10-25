@@ -206,6 +206,7 @@ public class DrawingPanel extends VBox{
                 gridUpperLeft.getY() + col * cellSize,
                 cellSize, cellSize
         );
+        userPuzzle.clearSpace(col, row);
     }
 
     private void clearIm(int row, int col, GraphicsContext g){
@@ -226,7 +227,7 @@ public class DrawingPanel extends VBox{
                 cellSize
         );
         drawLayout(g);
-
+        userPuzzle.clearSpace(col, row);
     }
 
     private void mouseClicked(MouseEvent e) {
@@ -241,6 +242,7 @@ public class DrawingPanel extends VBox{
             drawDot(Col, Row, g);
             // Draw the spot at the calculated row and column
             boardd[Row][Col] = 1;
+            userPuzzle.clearSpace(Col, Row);
         } else if (boardd[Row][Col] == 1) {
             clearIm(Col,Row,g);
             // Draw the star at the calculated row and column
@@ -248,6 +250,7 @@ public class DrawingPanel extends VBox{
             boardd[Row][Col] = 2;
         }
         else{
+            userPuzzle.clearSpace(Col, Row);
             clearIm(Col,Row,g);
             boardd[Row][Col] = 0;
 
