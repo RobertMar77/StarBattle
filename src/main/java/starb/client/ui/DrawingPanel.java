@@ -206,6 +206,7 @@ public class DrawingPanel extends VBox{
                 gridUpperLeft.getY() + col * cellSize,
                 cellSize, cellSize
         );
+
         userPuzzle.clearSpace(col, row);
     }
 
