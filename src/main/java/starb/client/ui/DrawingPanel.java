@@ -1,6 +1,5 @@
 package starb.client.ui;
 
-import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -9,132 +8,39 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import starb.client.Puzzle;
 import starb.server.FakeServ;
-
-import java.io.File;
-import java.util.Arrays;
-
-import static starb.client.ui.WinScene.Next;
+import static starb.client.ui.constants.*;
 
 public class DrawingPanel extends VBox{
-
-    private static final int WIDTH = 500;
-    private static final int HEIGHT = 500;
-
-    private static final File STAR_RED_IMAGE_FILE = new File("image/star_red.png");
-    private Image star_redImage;
-
-    private static final File STAR_IMAGE_FILE = new File("image/star_gold.png");
-    private Image starImage;
-    private static final File SPOT_IMAGE_FILE = new File("image/spot_the_cow.png");
-    private static final File DOT_IMAGE_FILE = new File("image/star_black.png");
-    private Image spotImage;
+    private Image redStar;
+    private Image blackStar;
     private Image dotImage;
     private Canvas canvas;
-
-    // Grid dimensions and location
-    private double cellSize = 40.0;
-    private int rows = 10;
-    private int cols = 10;
-    private Point2D gridUpperLeft = new Point2D(15,15);
-    GraphicsContext g;
-    public int[][] boardd = new int[10][10];
-
-
-
+    private GraphicsContext g;
+    public int[][] boardd;
     private final FakeServ serv = new FakeServ();
-    private final int[][] layout = serv.getLayout(0);       //the int will be the puzzle number we will change later
-    private final int[][] answer = serv.getAnswer(0);
-    private Puzzle userPuzzle = new Puzzle(answer, layout);
+    private int[][] layout;
+    private Puzzle userPuzzle;
 
     public static Stage st = new Stage();
 
     public DrawingPanel(){
-        canvas = new Canvas(WIDTH, HEIGHT);
-        HBox hbox1= new HBox(50);
-        HBox hbox2 = new HBox(10);
-
-        // Load the image files
-        try {
-            starImage = new Image(STAR_IMAGE_FILE.toURI().toURL().toString());
-            spotImage = new Image(SPOT_IMAGE_FILE.toURI().toURL().toString());
-            dotImage= new Image(DOT_IMAGE_FILE.toURI().toURL().toString());
-            star_redImage= new Image(STAR_RED_IMAGE_FILE.toURI().toURL().toString());
-        } catch(Exception e) {
-            String message = "Unable to load image: " + STAR_IMAGE_FILE;
-            System.err.println(message);
-            System.err.println(e.getMessage());
-            throw new RuntimeException(message);
-        }
-        Label time = new Label("Time");
-        Label Ftime = new Label("Fastest Time");
-        Button TimeSl = new Button("Time solve");
-        Button Rest = new Button("Rest");
-        hbox1.getChildren().addAll(time, Ftime);
-        hbox2.getChildren().addAll(TimeSl, Rest);
-        this.getChildren().addAll(hbox1, canvas, hbox2);
-        canvas.setOnMouseClicked( e -> mouseClicked(e));
-        draw();
-
+        this.layout = this.serv.getLayout(0);
+        int[][] answer = this.serv.getAnswer(0);
+        this.userPuzzle = new Puzzle(answer, this.layout);
+        this.boardd = new int[10][10];
+        loadImages();
+        setupCanvas();
+        drawGrid();
+        drawLayout();
     }
 
-
-
-    public void draw() {
-        g = canvas.getGraphicsContext2D();
-        g.setFill(Color.BLACK);
-
-        // Example grid
-        g.setLineWidth(1.0);
-        g.beginPath();
-        for( int i = 0; i < rows + 1; i++ ) {
-            double x1 = gridUpperLeft.getX();
-            double y1 = gridUpperLeft.getY() + i * cellSize;
-            double x2 = gridUpperLeft.getX() + cellSize * cols;
-            double y2 = y1;
-            g.moveTo(x1, y1);
-            g.lineTo(x2, y2);
-        }
-        for( int i = 0; i < cols + 1; i++ ) {
-            double x1 = gridUpperLeft.getX() + i * cellSize;
-            double y1 = gridUpperLeft.getY();
-            double x2 = x1;
-            double y2 = gridUpperLeft.getY() + cellSize * rows;
-            g.moveTo( x1, y1 );
-            g.lineTo( x2, y2 );
-        }
-        g.stroke();
-        g.closePath();
-
-        drawLayout(g);
-        // Draw a thicker line, left side of cells in column
-        /*g.setLineWidth(5.0);
-        int column = 1, startCellY = 1, endCellY = 3;
-        double x1 = column * cellSize + gridUpperLeft.getX();
-        double y1 = startCellY * cellSize + gridUpperLeft.getY();
-        double x2 = x1;
-        double y2 = (endCellY + 1) * cellSize + gridUpperLeft.getY();
-        g.strokeLine(x1, y1, x2, y2);*/
-
-        // Draw stars in a few cells of the grid
-        //drawStar( 3, 4, g );
-       // drawStar( 1, 1, g );
-        //drawStar( 0, 2, g );
-
-        // Draw the cow, just for fun.  This is demonstrating how you can draw any custom
-        // image.  Remove this... :)
-        float scale = 0.4f;
-        g.drawImage( spotImage, gridUpperLeft.getX() + cellSize * cols + 5,
-                gridUpperLeft.getY(),
-                spotImage.getWidth() * scale, spotImage.getHeight() * scale);
-    }
-
-    private void drawLayout(GraphicsContext g) {
+    private void drawLayout() {
+        GraphicsContext g = this.g;
         g.beginPath();
         g.setLineWidth(5.0);
         for (int i = 0; i < 10; i++) {
@@ -168,28 +74,23 @@ public class DrawingPanel extends VBox{
 
 
     private void drawStar( int row, int col, GraphicsContext g ) {
-        boolean isStar = userPuzzle.placeStar(col, row);
+        boolean isStarPlaced = userPuzzle.placeStar(col, row);
 
-        System.out.println(isStar);
-
-        if(isStar){     //star placement not illegal
-            g.drawImage(starImage,
-                    gridUpperLeft.getX() + row * cellSize,
-                    gridUpperLeft.getY() + col * cellSize,
+        if (isStarPlaced) {
+            g.drawImage(blackStar,
+                    gridUpperLeft.getX() + col * cellSize,
+                    gridUpperLeft.getY() + row * cellSize,
+                    cellSize, cellSize
+            );
+        } else {
+            g.drawImage(redStar,
+                    gridUpperLeft.getX() + col * cellSize,
+                    gridUpperLeft.getY() + row * cellSize,
                     cellSize, cellSize
             );
         }
-        else{
-            g.drawImage(star_redImage,
-                    gridUpperLeft.getX() + row * cellSize,
-                    gridUpperLeft.getY() + col * cellSize,
-                    cellSize, cellSize
-            );
-        }
 
-        if(userPuzzle.isCorrect()){             //add Win popup
-            System.out.println("correct");
-
+        if(userPuzzle.isCorrect()){ //add Win popup
             st.setScene(new Scene(new WinScene()));
             st.show();
         }
@@ -222,7 +123,8 @@ public class DrawingPanel extends VBox{
                 cellSize,
                 cellSize
         );
-        drawLayout(g);
+
+        drawLayout();
         userPuzzle.clearSpace(col, row);
     }
 
@@ -234,23 +136,75 @@ public class DrawingPanel extends VBox{
         int Row = (int) ((Y - gridUpperLeft.getY()) / 40);
         int Col = (int) ((X - gridUpperLeft.getX()) / 40);
 
-        if(boardd[Row][Col] == 0){
-            drawDot(Col, Row, g);
-            // Draw the spot at the calculated row and column
-            boardd[Row][Col] = 1;
-            userPuzzle.clearSpace(Col, Row);
-        } else if (boardd[Row][Col] == 1) {
-            clearIm(Col,Row,g);
+        clearIm(Col,Row,g);
+        if (boardd[Row][Col] == 0 ) {
+            drawStar(Row, Col, g);
             // Draw the star at the calculated row and column
-            drawStar(Col, Row, g);
+            boardd[Row][Col] = 1;
+        } else if (boardd[Row][Col] == 1) {
+            // Draw the dot at the calculated row and column
+            drawDot(Col, Row, g);
             boardd[Row][Col] = 2;
-        }
-        else{
             userPuzzle.clearSpace(Col, Row);
-            clearIm(Col,Row,g);
+        } else {
+            userPuzzle.clearSpace(Col, Row);
             boardd[Row][Col] = 0;
-
         }
 
+    }
+
+    private void drawGrid() {
+        GraphicsContext g = this.g;
+        g.setFill(Color.BLACK);
+
+        // Example grid
+        g.setLineWidth(1.0);
+        g.beginPath();
+        for( int i = 0; i < rows + 1; i++ ) {
+            double x1 = gridUpperLeft.getX();
+            double y1 = gridUpperLeft.getY() + i * cellSize;
+            double x2 = gridUpperLeft.getX() + cellSize * cols;
+            double y2 = y1;
+            g.moveTo(x1, y1);
+            g.lineTo(x2, y2);
+        }
+        for( int i = 0; i < cols + 1; i++ ) {
+            double x1 = gridUpperLeft.getX() + i * cellSize;
+            double y1 = gridUpperLeft.getY();
+            double x2 = x1;
+            double y2 = gridUpperLeft.getY() + cellSize * rows;
+            g.moveTo( x1, y1 );
+            g.lineTo( x2, y2 );
+        }
+        g.stroke();
+        g.closePath();
+    }
+
+    private void loadImages() {
+        try {
+            this.blackStar = new Image(STAR_BLACK_IMAGE_FILE.toURI().toURL().toString());
+            this.dotImage= new Image(DOT_IMAGE_FILE.toURI().toURL().toString());
+            this.redStar = new Image(STAR_RED_IMAGE_FILE.toURI().toURL().toString());
+        } catch(Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    private void setupCanvas() {
+        this.canvas = new Canvas(WIDTH, HEIGHT);
+        this.g = canvas.getGraphicsContext2D();
+
+        HBox hbox1= new HBox(50);
+        HBox hbox2 = new HBox(10);
+
+        Label time = new Label("Time");
+        Label Ftime = new Label("Fastest Time");
+        Button TimeSl = new Button("Time solve");
+        Button Rest = new Button("Rest");
+        hbox1.getChildren().addAll(time, Ftime);
+        hbox2.getChildren().addAll(TimeSl, Rest);
+        this.getChildren().addAll(hbox1, this.canvas, hbox2);
+
+        this.canvas.setOnMouseClicked( e -> mouseClicked(e));
     }
 }
