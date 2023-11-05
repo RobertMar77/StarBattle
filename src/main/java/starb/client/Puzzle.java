@@ -42,6 +42,7 @@ public class Puzzle {
             starLocations[y][x]= 1;
             return true;
         } else {
+            starLocations[y][x]= 1;
             return false;
         }
     }

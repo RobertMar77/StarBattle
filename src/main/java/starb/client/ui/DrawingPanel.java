@@ -13,6 +13,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import starb.client.Puzzle;
 import starb.server.FakeServ;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static starb.client.ui.constants.*;
 
 public class DrawingPanel extends VBox{
@@ -33,6 +37,7 @@ public class DrawingPanel extends VBox{
         int[][] answer = this.serv.getAnswer(0);
         this.userPuzzle = new Puzzle(answer, this.layout);
         this.boardd = new int[10][10];
+        redStars = new ArrayList<>();
         loadImages();
         setupCanvas();
         drawGrid();
@@ -72,9 +77,35 @@ public class DrawingPanel extends VBox{
         g.stroke();
     }
 
+    private void updateRedStars(int row, int col){
+        for(int i=0; i < redStars.size(); i++){
+            int[] redS = redStars.get(i);
+            if(redS[0]==row && redS[1] == col){     //remove current redStar
+                redStars.remove(redS);
+//                System.out.println("remove");
+            }
+        }
 
+        for(int i=0; i < redStars.size(); i++){
+            int[] redS = redStars.get(i);
+            if(userPuzzle.placeStar(redS[1], redS[0])){     //update others
+                drawStar(redS[0], redS[1], g);
+                redStars.remove(redS);
+                i--;
+            }
+//            System.out.println("r"+Arrays.toString(redS));
+        }
+    }
+
+    private static ArrayList<int[]> redStars;
     private void drawStar( int row, int col, GraphicsContext g ) {
         boolean isStarPlaced = userPuzzle.placeStar(col, row);
+//        int[][] board = userPuzzle.getBoard();
+//        for(int i=0; i < board.length; i++){
+//            System.out.println(Arrays.toString(board[i]));     //prints out board can be used tio check board
+//        }
+//        System.out.println();
+
 
         if (isStarPlaced) {
             g.drawImage(blackStar,
@@ -88,6 +119,10 @@ public class DrawingPanel extends VBox{
                     gridUpperLeft.getY() + row * cellSize,
                     cellSize, cellSize
             );
+            int[] rStar=new int[2];
+            rStar[0]= row;
+            rStar[1]= col;
+            redStars.add(rStar);
         }
 
         if(userPuzzle.isCorrect()){ //add Win popup
@@ -102,8 +137,6 @@ public class DrawingPanel extends VBox{
                 gridUpperLeft.getY() + col * cellSize,
                 cellSize, cellSize
         );
-
-        userPuzzle.clearSpace(col, row);
     }
 
     private void clearIm(int row, int col, GraphicsContext g){
@@ -125,7 +158,6 @@ public class DrawingPanel extends VBox{
         );
 
         drawLayout();
-        userPuzzle.clearSpace(col, row);
     }
 
     private void mouseClicked(MouseEvent e) {
@@ -146,8 +178,9 @@ public class DrawingPanel extends VBox{
             drawDot(Col, Row, g);
             boardd[Row][Col] = 2;
             userPuzzle.clearSpace(Col, Row);
+
+            updateRedStars(Row,Col);
         } else {
-            userPuzzle.clearSpace(Col, Row);
             boardd[Row][Col] = 0;
         }
 
