@@ -12,5 +12,4 @@ public class ExampleController {
     public String exampleGet() {
         return "Hello from your SpringBoot server!";
     }
-
 }

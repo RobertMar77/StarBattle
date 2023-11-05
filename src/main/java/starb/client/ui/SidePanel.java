@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import starb.client.ui.DrawingPanel;
 
 public class SidePanel extends VBox {
     Stage SideStage = new Stage();
@@ -22,14 +23,21 @@ public class SidePanel extends VBox {
 
         Button Menu = new Button("Menu");
         Button Solution = new Button("View Solution");
-        Button Mark = new Button("Mark type");
         Button Auto = new Button("Auto Mark type");
 
 
-        this.getChildren().addAll(Menu, Solution, Mark, Auto);
+        this.getChildren().addAll(Menu, Solution, Auto);
         Menu.setOnAction(e -> {
             Scene newScene = new Scene(new MenuScene());
             primaryStage.setScene(newScene);
+        });
+        Auto.setOnAction(e -> {
+            if(starb.client.ui.DrawingPanel.AutoOn == false){
+                starb.client.ui.DrawingPanel.AutoOn = true;
+            }
+            else{
+                starb.client.ui.DrawingPanel.AutoOn = false;
+            }
         });
 
     }

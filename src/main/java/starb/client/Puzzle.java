@@ -47,6 +47,23 @@ public class Puzzle {
         }
     }
 
+    public boolean vaildStar(int x, int y){
+        int starsAdjacent = numStarsAdjacent(x, y);
+        int starsInRow = numStarsInRow(x, y);
+        int starsInCol = numStarsInCol(x, y);
+        int starsInRegion = numStarsInRegion(x, y);
+
+        if (starsAdjacent < 1 &&
+                starsInRow < 2 &&
+                starsInCol < 2 &&
+                starsInRegion < 2
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * Counts the number of stars around the coordinates (x, y)
      * @param x the x coordinate

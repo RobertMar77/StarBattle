@@ -17,9 +17,11 @@ import starb.server.FakeServ;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static starb.client.StarbClient.primaryStage;
 import static starb.client.ui.constants.*;
 
 public class DrawingPanel extends VBox{
+    public static boolean AutoOn = false;
     private Image redStar;
     private Image blackStar;
     private Image dotImage;
@@ -133,8 +135,8 @@ public class DrawingPanel extends VBox{
 
     private void drawDot(int row, int col, GraphicsContext g){
         g.drawImage(dotImage,
-                gridUpperLeft.getX() + row * cellSize,
-                gridUpperLeft.getY() + col * cellSize,
+                gridUpperLeft.getX() + col * cellSize,
+                gridUpperLeft.getY() + row * cellSize,
                 cellSize, cellSize
         );
     }
@@ -142,8 +144,8 @@ public class DrawingPanel extends VBox{
     private void clearIm(int row, int col, GraphicsContext g){
         // Clear the contents of the grid cell
         g.clearRect(
-                gridUpperLeft.getX() + row * cellSize,
-                gridUpperLeft.getY() + col * cellSize,
+                gridUpperLeft.getX() + col * cellSize,
+                gridUpperLeft.getY() + row * cellSize,
                 cellSize,
                 cellSize
         );
@@ -151,8 +153,8 @@ public class DrawingPanel extends VBox{
 
         g.setLineWidth(1.0);
         g.strokeRect(
-                gridUpperLeft.getX() + row * cellSize,
-                gridUpperLeft.getY() + col * cellSize,
+                gridUpperLeft.getX() + col * cellSize,
+                gridUpperLeft.getY() + row * cellSize,
                 cellSize,
                 cellSize
         );
@@ -168,20 +170,24 @@ public class DrawingPanel extends VBox{
         int Row = (int) ((Y - gridUpperLeft.getY()) / 40);
         int Col = (int) ((X - gridUpperLeft.getX()) / 40);
 
-        clearIm(Col,Row,g);
+        clearIm(Row,Col,g);
         if (boardd[Row][Col] == 0 ) {
             drawStar(Row, Col, g);
             // Draw the star at the calculated row and column
             boardd[Row][Col] = 1;
         } else if (boardd[Row][Col] == 1) {
             // Draw the dot at the calculated row and column
-            drawDot(Col, Row, g);
+            drawDot(Row, Col, g);
             boardd[Row][Col] = 2;
             userPuzzle.clearSpace(Col, Row);
 
             updateRedStars(Row,Col);
         } else {
             boardd[Row][Col] = 0;
+        }
+
+        if(AutoOn) {
+            autoDraw();
         }
 
     }
@@ -239,5 +245,34 @@ public class DrawingPanel extends VBox{
         this.getChildren().addAll(hbox1, this.canvas, hbox2);
 
         this.canvas.setOnMouseClicked( e -> mouseClicked(e));
+
+        Rest.setOnAction(e -> {
+            Scene newScene = new Scene(new GameScene());
+            primaryStage.setScene(newScene);
+        });
     }
+
+    private void autoDraw() {
+        for (int row = 0; row < 10; row++) {
+            for (int col = 0; col < 10; col++) {
+                if(boardd[row][col] != 1) {
+                    if (userPuzzle.vaildStar(col, row)) {
+                        clearIm(row, col, g);
+                        boardd[row][col] = 0;
+                    }
+                }
+            }
+        }
+
+        for (int col = 0; col < 10; col++) {
+            for (int row = 0; row < 10; row++) {
+                    if (!userPuzzle.vaildStar(col, row)) {
+                        clearIm(row, col, g);
+                        drawDot(row, col, g);
+                        boardd[row][col] = 2;
+                    }
+            }
+        }
+    }
+
 }
