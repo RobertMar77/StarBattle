@@ -35,7 +35,7 @@ public class PuzzleBootstrap {
     @EventListener
     public void onApplicationStart(ApplicationReadyEvent event) {
         // If the database already has data, do nothing.
-        if( repo.count() > 0 ) return;
+        //if( repo.count() > 0 ){ return;}
 
         // Load the JSON file, and insert each object into the database
         ObjectMapper mapper = new ObjectMapper();
