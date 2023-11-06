@@ -37,8 +37,8 @@ public class DrawingPanel extends VBox{
     public static Stage st = new Stage();
 
     public DrawingPanel(){
-        this.layout = this.serv.getLayout("0");
-        int[][] answer = this.serv.getAnswer("0");
+        this.layout = this.serv.getLayout("1");
+        int[][] answer = this.serv.getAnswer("1");
         this.userPuzzle = new Puzzle(answer, this.layout);
         this.boardd = new int[10][10];
         redStars = new ArrayList<>();
