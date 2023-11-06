@@ -19,7 +19,7 @@ import java.util.List;
 @Component
 public class PuzzleBootstrap {
 
-    private static final String PUZZLE_DATA_FILE = "puzzles/puzzles.json";
+    private static final String PUZZLE_DATA_FILE = "Puzzel Json/puzzles.json";
     private PuzzleRepository repo;
     public PuzzleBootstrap( PuzzleRepository repo ) {
         this.repo = repo;
