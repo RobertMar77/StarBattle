@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import starb.client.Puzzle;
+import starb.client.ServerClient;
 import starb.server.FakeServ;
 
 import java.util.ArrayList;
@@ -28,15 +29,16 @@ public class DrawingPanel extends VBox{
     private Canvas canvas;
     private GraphicsContext g;
     public int[][] boardd;
-    private final FakeServ serv = new FakeServ();
+   // private final FakeServ serv = new FakeServ();
+    private ServerClient serv = new ServerClient();
     private int[][] layout;
     private Puzzle userPuzzle;
 
     public static Stage st = new Stage();
 
     public DrawingPanel(){
-        this.layout = this.serv.getLayout(0);
-        int[][] answer = this.serv.getAnswer(0);
+        this.layout = this.serv.getLayout("0");
+        int[][] answer = this.serv.getAnswer("0");
         this.userPuzzle = new Puzzle(answer, this.layout);
         this.boardd = new int[10][10];
         redStars = new ArrayList<>();
