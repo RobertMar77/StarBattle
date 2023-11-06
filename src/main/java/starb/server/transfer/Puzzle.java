@@ -33,7 +33,7 @@ public class Puzzle {
             @JsonProperty("solution") List<Cell> solution,
             @JsonProperty("gridSize") int gridSize,
             @JsonProperty("numStars") int numStars ) {
-        this.id = id;
+        this.id = String.valueOf(level);
         this.level = level;
         this.regions = Collections.unmodifiableList(regions);
         this.solution = Collections.unmodifiableList(solution);
