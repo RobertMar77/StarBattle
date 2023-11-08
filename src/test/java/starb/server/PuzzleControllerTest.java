@@ -4,7 +4,9 @@ import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import starb.server.controller.PuzzleController;
 import starb.server.repo.PuzzleRepository;
 import starb.server.transfer.Puzzle;
@@ -15,6 +17,8 @@ import java.util.List;
 import static org.hamcrest.beans.SamePropertyValuesAs.samePropertyValuesAs;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
+@ActiveProfiles("test")
 public class PuzzleControllerTest
 {
 
@@ -32,16 +36,16 @@ public class PuzzleControllerTest
     );
 
     private final List<List<Cell> > layout1 = List.of(
-            List.of(new Cell(0, 0), new Cell(0, 1), new Cell(0, 2), new Cell(0, 3), new Cell(0, 4), new Cell(0, 5), new Cell(0, 6), new Cell(0, 7), new Cell(0, 8), new Cell(0, 9)),
-            List.of(new Cell(1, 0), new Cell(1, 1), new Cell(1, 2), new Cell(1, 3), new Cell(1, 4), new Cell(1, 5), new Cell(1, 6), new Cell(1, 7), new Cell(1, 8), new Cell(1, 9)),
-            List.of(new Cell(2, 0), new Cell(2, 1), new Cell(2, 2), new Cell(2, 3), new Cell(2, 4), new Cell(2, 5), new Cell(2, 6), new Cell(2, 7), new Cell(2, 8), new Cell(2, 9)),
-            List.of(new Cell(3, 0), new Cell(3, 1), new Cell(3, 2), new Cell(3, 3), new Cell(3, 4), new Cell(3, 5), new Cell(3, 6), new Cell(3, 7), new Cell(3, 8), new Cell(3, 9)),
-            List.of(new Cell(4, 0), new Cell(4, 1), new Cell(4, 2), new Cell(4, 3), new Cell(4, 4), new Cell(4, 5), new Cell(4, 6), new Cell(4, 7), new Cell(4, 8), new Cell(4, 9)),
-            List.of(new Cell(5, 0), new Cell(5, 1), new Cell(5, 2), new Cell(5, 3), new Cell(5, 4), new Cell(5, 5), new Cell(5, 6), new Cell(5, 7), new Cell(5, 8), new Cell(5, 9)),
-            List.of(new Cell(6, 0), new Cell(6, 1), new Cell(6, 2), new Cell(6, 3), new Cell(6, 4), new Cell(6, 5), new Cell(6, 6), new Cell(6, 7), new Cell(6, 8), new Cell(6, 9)),
-            List.of(new Cell(7, 0), new Cell(7, 1), new Cell(7, 2), new Cell(7, 3), new Cell(7, 4), new Cell(7, 5), new Cell(7, 6), new Cell(7, 7), new Cell(7, 8), new Cell(7, 9)),
-            List.of(new Cell(8, 0), new Cell(8, 1), new Cell(8, 2), new Cell(8, 3), new Cell(8, 4), new Cell(8, 5), new Cell(8, 6), new Cell(8, 7), new Cell(8, 8), new Cell(8, 9)),
-            List.of(new Cell(9, 0), new Cell(9, 1), new Cell(9, 2), new Cell(9, 3), new Cell(9, 4), new Cell(9, 5), new Cell(9, 6), new Cell(9, 7), new Cell(9, 8), new Cell(9, 9))
+            List.of(new Cell(0, 0), new Cell(0, 1), new Cell(0, 2), new Cell(0, 3), new Cell(0, 4), new Cell(0, 5), new Cell(0, 6), new Cell(0, 7), new Cell(1, 0), new Cell(1, 2), new Cell(1, 3), new Cell(1, 4), new Cell(1, 5), new Cell(1, 7)),
+            List.of(new Cell(0, 8), new Cell(0, 9),new Cell(1, 8), new Cell(1, 9),new Cell(2, 8), new Cell(2, 9),new Cell(3, 8), new Cell(3, 9),new Cell(4, 8), new Cell(4, 9),new Cell(5, 8), new Cell(5, 9), new Cell(6, 9)),
+            List.of(new Cell(2, 0),new Cell(3, 0), new Cell(3, 1),new Cell(4, 0), new Cell(4, 1),new Cell(5, 0), new Cell(5, 1),new Cell(6, 0), new Cell(6, 1),new Cell(7, 0), new Cell(7, 1),new Cell(3, 2), new Cell(3, 3),new Cell(4, 3), new Cell(7, 2),new Cell(7, 3), new Cell(7, 4),new Cell(7, 5), new Cell(8, 0)),
+            List.of(new Cell(2, 1),new Cell(2, 3), new Cell(2, 4)),
+            List.of(new Cell(1, 6),new Cell(2, 5), new Cell(2, 6),new Cell(2, 7), new Cell(3, 8)),
+            List.of(new Cell(3, 4),new Cell(4, 3), new Cell(4, 4),new Cell(4, 5), new Cell(5, 3),new Cell(5, 4), new Cell(5, 5)),
+            List.of(new Cell(3, 5),new Cell(3, 6), new Cell(4, 6),new Cell(4, 7), new Cell(5, 6),new Cell(5, 7), new Cell(6, 5),new Cell(6, 6), new Cell(6, 7),new Cell(7, 6), new Cell(7, 7)),
+            List.of(new Cell(5, 2),new Cell(6, 2), new Cell(6, 3), new Cell(6, 4)),
+            List.of(new Cell(6, 8),new Cell(7, 8), new Cell(8, 8),new Cell(9, 0), new Cell(8, 9), new Cell(9,9)),
+            List.of(new Cell(9, 0), new Cell(9, 1), new Cell(9, 2), new Cell(9, 3), new Cell(9, 4), new Cell(9, 5), new Cell(9, 6), new Cell(9, 7), new Cell(9, 8), new Cell(8, 1), new Cell(8,2), new Cell(8, 3), new Cell(8,4), new Cell(8, 5), new Cell(8,6), new Cell(8,7))
     );
     private final int[][] answer2 = {
             {0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
