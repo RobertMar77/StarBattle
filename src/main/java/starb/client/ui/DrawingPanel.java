@@ -86,7 +86,6 @@ public class DrawingPanel extends VBox{
             int[] redS = redStars.get(i);
             if(redS[0]==row && redS[1] == col){     //remove current redStar
                 redStars.remove(redS);
-//                System.out.println("remove");
             }
         }
 
@@ -97,19 +96,12 @@ public class DrawingPanel extends VBox{
                 redStars.remove(redS);
                 i--;
             }
-//            System.out.println("r"+Arrays.toString(redS));
         }
     }
 
     private static ArrayList<int[]> redStars;
     private void drawStar( int row, int col, GraphicsContext g ) {
         boolean isStarPlaced = userPuzzle.placeStar(col, row);
-//        int[][] board = userPuzzle.getBoard();
-//        for(int i=0; i < board.length; i++){
-//            System.out.println(Arrays.toString(board[i]));     //prints out board can be used tio check board
-//        }
-//        System.out.println();
-
 
         if (isStarPlaced) {
             g.drawImage(blackStar,
@@ -241,14 +233,14 @@ public class DrawingPanel extends VBox{
         Label time = new Label("Time");
         Label Ftime = new Label("Fastest Time");
         Button TimeSl = new Button("Time solve");
-        Button Rest = new Button("Rest");
+        Button Reset = new Button("Reset");
         hbox1.getChildren().addAll(time, Ftime);
-        hbox2.getChildren().addAll(TimeSl, Rest);
+        hbox2.getChildren().addAll(TimeSl, Reset);
         this.getChildren().addAll(hbox1, this.canvas, hbox2);
 
         this.canvas.setOnMouseClicked( e -> mouseClicked(e));
 
-        Rest.setOnAction(e -> {
+        Reset.setOnAction(e -> {
             Scene newScene = new Scene(new GameScene());
             primaryStage.setScene(newScene);
         });
