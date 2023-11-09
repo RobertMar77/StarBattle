@@ -122,7 +122,7 @@ public class DrawingPanel extends VBox{
         }
 
         if(userPuzzle.isCorrect()){ //add Win popup
-            st.setScene(new Scene(new WinScene()));
+            st.setScene(new Scene(new WinScene(), 200, 200));
             st.show();
         }
     }

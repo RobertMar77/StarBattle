@@ -16,7 +16,7 @@ public class WinScene extends VBox {
     public WinScene(){
         this.setAlignment(Pos.CENTER);
         Text con = new Text("NICE YOU SOLVED THE PUZZLE");
-        Text con2 = new Text("READY FOR THE NEXT ONE");
+        Text con2 = new Text("READY FOR THE NEXT ONE?");
         Next = new Button("NEXT PUZZLE");
         this.getChildren().addAll(con, con2, Next);
 
