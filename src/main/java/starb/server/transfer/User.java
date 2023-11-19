@@ -32,7 +32,7 @@ public class User {
 
     public int getPuzzlesSolved(){ return puzzlesSolved; }
 
-    //Title is only get called for player info so we don't need a setter
+    //Title is only called for player info, so we don't need a setter
     public static String getTitle() {
         if(levelsSolved==0){
             title= "New Player";
