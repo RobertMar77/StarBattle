@@ -59,13 +59,13 @@ public class DrawingPanel extends VBox{
            System.out.println("Get UserID: "+ UserID);
         }
 
-        //test methods
-        System.out.println("Level: "+serv.getUserLevel(UserID));
-        serv.setUserLevel(UserID, 2);
-        System.out.println("Level: "+serv.getUserLevel(UserID));
-        System.out.println("Solved: "+serv.getUserSolved(UserID));
-        serv.addSolved(UserID);
-        System.out.println("Solved: "+serv.getUserSolved(UserID));
+        //test methods uncomment to test these
+//        System.out.println("Level: "+serv.getUserLevel(UserID));
+//        serv.setUserLevel(UserID, 2);
+//        System.out.println("Level: "+serv.getUserLevel(UserID));
+//        System.out.println("Solved: "+serv.getUserSolved(UserID));
+//        serv.addSolved(UserID);
+//        System.out.println("Solved: "+serv.getUserSolved(UserID));
 
     }
 
