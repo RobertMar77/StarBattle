@@ -38,8 +38,10 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User addUser(@RequestBody User body) {
-        return repo.save(body);
+    public String addUser() {
+        User body = new User();
+        repo.save(body);
+        return body.getUserId();
     }
 
 
