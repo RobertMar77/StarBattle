@@ -33,6 +33,7 @@ public class DrawingPanel extends VBox{
     private ServerClient serv = new ServerClient();
     private int[][] layout;
     private Puzzle userPuzzle;
+    private String UserID;
 
     public static Stage st = new Stage();
 
@@ -46,6 +47,26 @@ public class DrawingPanel extends VBox{
         setupCanvas();
         drawGrid();
         drawLayout();
+        UserID=serv.getUserID();
+        System.out.println("UserID: "+ UserID);
+        // get current UserID in UserID.txt file and creates new one if not in server
+        // Technically all posts are in the sign-in phase, but I am adding it here since we haven't added it yet
+        if(serv.getUserID().isEmpty()){
+            UserID = serv.postUserID();
+            System.out.println("Post UserID: "+ UserID);
+        }else {
+           UserID = serv.getUserID();
+           System.out.println("Get UserID: "+ UserID);
+        }
+
+        //test methods
+        System.out.println("Level: "+serv.getUserLevel(UserID));
+        serv.setUserLevel(UserID, 2);
+        System.out.println("Level: "+serv.getUserLevel(UserID));
+        System.out.println("Solved: "+serv.getUserSolved(UserID));
+        serv.addSolved(UserID);
+        System.out.println("Solved: "+serv.getUserSolved(UserID));
+
     }
 
     private void drawLayout() {
