@@ -1,17 +1,15 @@
 package starb.client;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.*;
+import java.net.http.HttpClient;
+import java.net.http.HttpResponse;
 import java.util.Scanner;
 
 /**
@@ -26,13 +24,13 @@ public class ServerClient {
         this.restTemplate = new RestTemplate();
         this.baseUrl = "http://localhost:3390/";
     }
-    public int[][] getLayout(String puzzleId) {
-        ResponseEntity<int[][]> response = restTemplate.getForEntity(baseUrl + "puzzles/" + puzzleId + "/layout", int[][].class);
+    public int[][] getLayout(int puzzleLevel) {
+        ResponseEntity<int[][]> response = restTemplate.getForEntity(baseUrl + "puzzles/" + puzzleLevel + "/layout", int[][].class);
         return response.getBody();
     }
 
-    public int[][] getAnswer(String puzzleId) {
-        ResponseEntity<int[][]> response = restTemplate.getForEntity(baseUrl + "puzzles/" + puzzleId + "/answer", int[][].class);
+    public int[][] getAnswer(int puzzleLevel) {
+        ResponseEntity<int[][]> response = restTemplate.getForEntity(baseUrl + "puzzles/" + puzzleLevel + "/answer", int[][].class);
         return response.getBody();
     }
 
@@ -99,10 +97,11 @@ public class ServerClient {
     //stuff below not all working
     public int getUserLevel(String UserID) {
         ResponseEntity<Integer> response = restTemplate.getForEntity(baseUrl + "users/" + UserID + "/level", int.class);
+        System.out.print(response.getBody());
         return response.getBody();
     }
 
-    public void setUserLevel(String UserID, int level) {
+    public void setUserLevel(String UserID, int level)  {
 //        try {
 //            URL url = new URL(baseUrl+ "users/" + UserID + "/solved");
 //        HttpEntity<Integer> Entity = new HttpEntity<>(level);
@@ -110,9 +109,26 @@ public class ServerClient {
 //        } catch (MalformedURLException e) {
 //            throw new RuntimeException(e);
 //        }
-         restTemplate.patchForObject(baseUrl+ "users/" + UserID + "/level", level,Void.class);
+ //        restTemplate.patchForObject(baseUrl+ "users/" + UserID + "/level", level,Void.class);
 //        ResponseEntity<Void> responseEntity = this.testRestTemplate.exchange(testUri + ENDPOINT_USER, HttpMethod.PATCH, new HttpEntity<>(userUpdate), Void.class);
 //        restTemplate.exchange(U, level, Void.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Integer> requestEntity = new HttpEntity<>(headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        try {
+            // Make the PATCH request with level in the URL
+            restTemplate.exchange(baseUrl + "/users/" + UserID + "/" + level, HttpMethod.PATCH, requestEntity, Void.class);
+            System.out.println("PATCH request successful");
+        } catch (Exception e) {
+            System.err.println("Error making PATCH request: " + e.getMessage());
+
+        }
+
+
+
+
     }
 
 

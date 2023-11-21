@@ -16,7 +16,7 @@ public class User {
     public User()
     {
         this.userId = UUID.randomUUID().toString();
-        levelsSolved = 0;
+        levelsSolved = 1;
         puzzlesSolved = 0;
         title = "";
     }

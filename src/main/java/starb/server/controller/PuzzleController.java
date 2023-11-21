@@ -26,26 +26,26 @@ public class PuzzleController {
         return list;
     }
 
-    @GetMapping("{id}")
+    @GetMapping("{level}")
     @ResponseStatus(HttpStatus.OK)
-    public Puzzle getById(@PathVariable String id) {
-        Optional<Puzzle> opt = repo.findById(id);
+    public Puzzle getById(@PathVariable int level) {
+        Optional<Puzzle> opt = repo.findByLevel(level);
         if( opt.isEmpty() ) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         return opt.get();
     }
 
     // New endpoint to get a puzzle layout by ID
-    @GetMapping("/{id}/layout")
-    public int[][] getLayout(@PathVariable String id) {
-        return repo.findById(id)
+    @GetMapping("/{level}/layout")
+    public int[][] getLayout(@PathVariable int level) {
+        return repo.findByLevel(level)
                 .map(Puzzle::getLayout)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Puzzle not found"));
     }
 
     // New endpoint to get a puzzle answer by ID
-    @GetMapping("/{id}/answer")
-    public int[][] getAnswer(@PathVariable String id) {
-        return repo.findById(id)
+    @GetMapping("/{level}/answer")
+    public int[][] getAnswer(@PathVariable int level) {
+        return repo.findByLevel(level)
                 .map(Puzzle::getAnswer)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Puzzle not found"));
     }

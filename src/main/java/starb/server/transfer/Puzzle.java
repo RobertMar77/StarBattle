@@ -7,7 +7,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Represents a Star Battle puzzle.  Data is immutable.

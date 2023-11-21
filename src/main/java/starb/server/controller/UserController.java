@@ -56,8 +56,8 @@ public class UserController {
     }
 
     // New endpoint to change a User's solved levels by ID
-    @PatchMapping("/{userId}/level")
-    public void setLevel(@PathVariable String userId, @RequestBody int level) {
+    @PatchMapping("/{userId}/{level}")
+    public void setLevel(@PathVariable String userId, @PathVariable int level) {
         Optional<User> optUser = repo.findById(userId);
 
         if( optUser.isEmpty() ) {

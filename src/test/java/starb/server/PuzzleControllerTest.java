@@ -118,7 +118,7 @@ public class PuzzleControllerTest
     @Test
     public void getSinglePuzzle()
     {
-        Puzzle result = controller.getById(puzzle1.getId());
+        Puzzle result = controller.getById(puzzle1.getLevel());
         MatcherAssert.assertThat(result, samePropertyValuesAs(puzzle1));
     }
 
@@ -136,7 +136,7 @@ public class PuzzleControllerTest
     @Test
     public void getSinglePuzzleById()
     {
-        Puzzle result = controller.getById("test-id");
+        Puzzle result = controller.getById(3);
 
         MatcherAssert.assertThat(result, samePropertyValuesAs(puzzle3));
     }
@@ -152,7 +152,7 @@ public class PuzzleControllerTest
     @Test
     public void getLayout()
     {
-        int[][] result = controller.getLayout(puzzle1.getId());
+        int[][] result = controller.getLayout(puzzle1.getLevel());
 
         MatcherAssert.assertThat(result, samePropertyValuesAs(layout1));
     }
@@ -160,7 +160,7 @@ public class PuzzleControllerTest
     @Test
     public void getAnswer()
     {
-        int[][] result = controller.getAnswer(puzzle1.getId());
+        int[][] result = controller.getAnswer(puzzle1.getLevel());
 
         MatcherAssert.assertThat(result, samePropertyValuesAs(answer1));
     }

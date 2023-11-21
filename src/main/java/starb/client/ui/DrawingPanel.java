@@ -34,12 +34,15 @@ public class DrawingPanel extends VBox{
     private int[][] layout;
     private Puzzle userPuzzle;
     private String UserID;
+    private int userLevel;
 
     public static Stage st = new Stage();
 
     public DrawingPanel(){
-        this.layout = this.serv.getLayout("1");
-        int[][] answer = this.serv.getAnswer("1");
+        UserID=serv.getUserID();
+        this.userLevel = serv.getUserLevel(UserID);
+        this.layout = this.serv.getLayout(userLevel);
+        int[][] answer = this.serv.getAnswer(userLevel);
         this.userPuzzle = new Puzzle(answer, this.layout);
         this.boardd = new int[10][10];
         redStars = new ArrayList<>();
@@ -47,7 +50,6 @@ public class DrawingPanel extends VBox{
         setupCanvas();
         drawGrid();
         drawLayout();
-        UserID=serv.getUserID();
         System.out.println("UserID: "+ UserID);
         // get current UserID in UserID.txt file and creates new one if not in server
         // Technically all posts are in the sign-in phase, but I am adding it here since we haven't added it yet
@@ -143,6 +145,8 @@ public class DrawingPanel extends VBox{
         }
 
         if(userPuzzle.isCorrect()){ //add Win popup
+            userLevel = userLevel + 1;
+            serv.setUserLevel(UserID, userLevel);
             st.setScene(new Scene(new WinScene(), 200, 200));
             st.show();
         }
