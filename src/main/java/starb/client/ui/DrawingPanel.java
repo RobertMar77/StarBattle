@@ -39,7 +39,15 @@ public class DrawingPanel extends VBox{
     public static Stage st = new Stage();
 
     public DrawingPanel(){
-        UserID=serv.getUserID();
+        // get current UserID in UserID.txt file and creates new one if not in server
+        // Technically all posts are in the sign-in phase, but I am adding it here since we haven't added it yet
+        if(serv.getUserID().isEmpty()){
+            UserID = serv.postUserID();
+            System.out.println("Post UserID: "+ UserID);
+        }else {
+            UserID = serv.getUserID();
+            System.out.println("Get UserID: "+ UserID);
+        }
         this.userLevel = serv.getUserLevel(UserID);
         this.layout = this.serv.getLayout(userLevel);
         int[][] answer = this.serv.getAnswer(userLevel);
@@ -51,17 +59,12 @@ public class DrawingPanel extends VBox{
         drawGrid();
         drawLayout();
         System.out.println("UserID: "+ UserID);
-        // get current UserID in UserID.txt file and creates new one if not in server
-        // Technically all posts are in the sign-in phase, but I am adding it here since we haven't added it yet
-        if(serv.getUserID().isEmpty()){
-            UserID = serv.postUserID();
-            System.out.println("Post UserID: "+ UserID);
-        }else {
-           UserID = serv.getUserID();
-           System.out.println("Get UserID: "+ UserID);
-        }
+
+
 
         //test methods uncomment to test these
+
+//        serv.setUserLevel(UserID, 3);
 //        System.out.println("Level: "+serv.getUserLevel(UserID));
 //        serv.setUserLevel(UserID, 2);
 //        System.out.println("Level: "+serv.getUserLevel(UserID));
@@ -69,6 +72,7 @@ public class DrawingPanel extends VBox{
 //        serv.addSolved(UserID);
 //        System.out.println("Solved: "+serv.getUserSolved(UserID));
 
+        //serv.setUserLevel(UserID, 1);
     }
 
     private void drawLayout() {

@@ -8,9 +8,9 @@ import java.util.UUID;
 public class User {
     @Id
     private String userId;
-    private static int levelsSolved;
-    private static int puzzlesSolved;
-    private static String title;
+    private int levelsSolved;
+    private int puzzlesSolved;
+    private String title;
 
     @JsonCreator
     public User()

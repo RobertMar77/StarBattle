@@ -29,7 +29,7 @@ public class MenuScene extends VBox {
         this.getChildren().addAll(panel1, panel2, Profile);
 
         Profile.setOnAction(e -> {
-            Scene newScene = new Scene(new ProfileScene(), 200, 200);
+            Scene newScene = new Scene(new ProfileScene(), 300, 200);
             primaryStage.setScene(newScene);
         });
     }

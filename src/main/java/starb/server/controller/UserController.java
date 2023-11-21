@@ -56,16 +56,17 @@ public class UserController {
     }
 
     // New endpoint to change a User's solved levels by ID
-    @PatchMapping("/{userId}/{level}")
-    public void setLevel(@PathVariable String userId, @PathVariable int level) {
+    @PatchMapping("/{userId}/level")
+    public void setLevel(@PathVariable String userId, @RequestBody int level) {
         Optional<User> optUser = repo.findById(userId);
 
         if( optUser.isEmpty() ) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
 
-        optUser.get().setLevelsSolved(level);
-        repo.save(optUser.get());
+        User user = optUser.get();
+        user.setLevelsSolved(level);
+        repo.save(user);
     }
 
     // New endpoint to get a User's solved puzzles by ID

@@ -1,5 +1,7 @@
 package starb.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
@@ -9,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.*;
 import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Scanner;
 
@@ -102,33 +105,27 @@ public class ServerClient {
     }
 
     public void setUserLevel(String UserID, int level)  {
-//        try {
-//            URL url = new URL(baseUrl+ "users/" + UserID + "/solved");
-//        HttpEntity<Integer> Entity = new HttpEntity<>(level);
-//            restTemplate.exchange(baseUrl+ "users/" + UserID + "/level", HttpMethod.PATCH, Entity,Void.class);
-//        } catch (MalformedURLException e) {
-//            throw new RuntimeException(e);
-//        }
- //        restTemplate.patchForObject(baseUrl+ "users/" + UserID + "/level", level,Void.class);
-//        ResponseEntity<Void> responseEntity = this.testRestTemplate.exchange(testUri + ENDPOINT_USER, HttpMethod.PATCH, new HttpEntity<>(userUpdate), Void.class);
-//        restTemplate.exchange(U, level, Void.class);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Integer> requestEntity = new HttpEntity<>(headers);
+        HttpClient client = HttpClient.newHttpClient();
+        ObjectMapper mapper = new ObjectMapper();
 
-        RestTemplate restTemplate = new RestTemplate();
+        String jsonBody = null;
         try {
-            // Make the PATCH request with level in the URL
-            restTemplate.exchange(baseUrl + "/users/" + UserID + "/" + level, HttpMethod.PATCH, requestEntity, Void.class);
-            System.out.println("PATCH request successful");
-        } catch (Exception e) {
-            System.err.println("Error making PATCH request: " + e.getMessage());
-
+            jsonBody = mapper.writeValueAsString(level);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
-
-
-
-
+        java.net.http.HttpRequest req = java.net.http.HttpRequest.newBuilder()
+                .header("Content-Type", "application/json")
+                .method("PATCH", HttpRequest.BodyPublishers.ofString(jsonBody))
+                .uri(URI.create(baseUrl +"users/" + UserID + "/level"))
+                .build();
+        try {
+            HttpResponse<String> response = client.send(req, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -138,7 +135,19 @@ public class ServerClient {
     }
 
     public void addSolved(String UserID) {
-        restTemplate.patchForObject(baseUrl + "users/" + UserID + "/solved", null,null);
+        HttpClient client = HttpClient.newHttpClient();
+        ObjectMapper mapper = new ObjectMapper();
+
+        java.net.http.HttpRequest req = java.net.http.HttpRequest.newBuilder()
+                .header("Content-Type", "application/json")
+                .method("PATCH", HttpRequest.BodyPublishers.ofString(""))
+                .uri(URI.create(baseUrl +"users/" + UserID + "/solved"))
+                .build();
+        try {
+            HttpResponse<String> response = client.send(req, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
