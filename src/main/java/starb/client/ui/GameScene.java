@@ -3,6 +3,7 @@ package starb.client.ui;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import starb.client.ServerClient;
 import starb.client.StarbClient;
 
 /**
@@ -14,11 +15,22 @@ public class GameScene extends HBox {
     private DrawingPanel graphicsPanel;
 
     private SidePanel sidePanel;
+    private ServerClient serv = new ServerClient();
+    private String UserID;
+    public static int userLevel;
 
 
     public GameScene() {
+        if(serv.getUserID().isEmpty()){
+            UserID = serv.postUserID();
+            System.out.println("Post UserID: "+ UserID);
+        }else {
+            UserID = serv.getUserID();
+            System.out.println("Get UserID: "+ UserID);
+        }
+        this.userLevel = serv.getUserLevel(UserID);
 
-        graphicsPanel = new DrawingPanel();
+        graphicsPanel = new DrawingPanel(userLevel);
         Stage primaryStage = StarbClient.getStage();
         sidePanel = new SidePanel(primaryStage);
 
@@ -26,6 +38,15 @@ public class GameScene extends HBox {
 
         this.getChildren().addAll(graphicsPanel, sidePanel);
 
+    }
+    public GameScene(int userLevel){
+        graphicsPanel = new DrawingPanel(userLevel);
+        Stage primaryStage = StarbClient.getStage();
+        sidePanel = new SidePanel(primaryStage);
+
+
+
+        this.getChildren().addAll(graphicsPanel, sidePanel);
     }
 
 

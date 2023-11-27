@@ -38,17 +38,11 @@ public class DrawingPanel extends VBox{
 
     public static Stage st = new Stage();
 
-    public DrawingPanel(){
+    public DrawingPanel(int Userlevel){
         // get current UserID in UserID.txt file and creates new one if not in server
         // Technically all posts are in the sign-in phase, but I am adding it here since we haven't added it yet
-        if(serv.getUserID().isEmpty()){
-            UserID = serv.postUserID();
-            System.out.println("Post UserID: "+ UserID);
-        }else {
-            UserID = serv.getUserID();
-            System.out.println("Get UserID: "+ UserID);
-        }
-        this.userLevel = serv.getUserLevel(UserID);
+        UserID = serv.getUserID();
+        userLevel = Userlevel;
         this.layout = this.serv.getLayout(userLevel);
         int[][] answer = this.serv.getAnswer(userLevel);
         this.userPuzzle = new Puzzle(answer, this.layout);

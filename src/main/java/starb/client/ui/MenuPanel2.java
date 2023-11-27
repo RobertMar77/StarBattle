@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import static starb.client.StarbClient.primaryStage;
+import static starb.client.ui.GameScene.userLevel;
 
 public class MenuPanel2  extends HBox {
    public MenuPanel2() {
@@ -20,6 +21,11 @@ public class MenuPanel2  extends HBox {
 
        play.setOnAction(e -> {
            Scene newScene = new Scene(new GameScene());
+           primaryStage.setScene(newScene);
+       });
+
+       b1.setOnAction(e -> {
+           Scene newScene = new Scene(new PuzzleCompletedScene(userLevel), 400, 400);
            primaryStage.setScene(newScene);
        });
    }
