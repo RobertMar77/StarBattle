@@ -32,7 +32,7 @@ public class GameScene extends HBox {
 
         graphicsPanel = new DrawingPanel(userLevel);
         Stage primaryStage = StarbClient.getStage();
-        sidePanel = new SidePanel(primaryStage);
+        sidePanel = new SidePanel(primaryStage, userLevel);
 
 
 
@@ -42,7 +42,7 @@ public class GameScene extends HBox {
     public GameScene(int userLevel){
         graphicsPanel = new DrawingPanel(userLevel);
         Stage primaryStage = StarbClient.getStage();
-        sidePanel = new SidePanel(primaryStage);
+        sidePanel = new SidePanel(primaryStage, userLevel);
 
 
 

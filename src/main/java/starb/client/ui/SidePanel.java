@@ -12,7 +12,7 @@ public class SidePanel extends VBox {
     Stage SideStage = new Stage();
     private final Stage primaryStage;
 
-    public SidePanel(Stage primaryStage) {
+    public SidePanel(Stage primaryStage, int userLevel) {
         this.primaryStage = primaryStage;
         this.setBorder(new Border(
                 new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID,
@@ -38,6 +38,12 @@ public class SidePanel extends VBox {
             else{
                 starb.client.ui.DrawingPanel.AutoOn = false;
             }
+        });
+
+
+        Solution.setOnAction(e -> {
+            Scene newScene = new Scene(new SolutionScene(userLevel));
+            primaryStage.setScene(newScene);
         });
 
     }
