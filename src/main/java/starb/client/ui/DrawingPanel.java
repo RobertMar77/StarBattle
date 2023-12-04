@@ -46,7 +46,7 @@ public class DrawingPanel extends VBox{
         this.layout = this.serv.getLayout(userLevel);
         int[][] answer = this.serv.getAnswer(userLevel);
         this.userPuzzle = new Puzzle(answer, this.layout);
-        this.boardd = new int[10][10];
+        this.boardd = new int[rows][cols];
         redStars = new ArrayList<>();
         loadImages();
         setupCanvas();
@@ -186,6 +186,12 @@ public class DrawingPanel extends VBox{
         // Calculate the row and column from mouse coordinates
         int Row = (int) ((Y - gridUpperLeft.getY()) / 40);
         int Col = (int) ((X - gridUpperLeft.getX()) / 40);
+
+        if (Row < 0 || Row >= rows || Col < 0 || Col >= cols) {
+            System.out.println(Row);
+            System.out.println(Col);
+            return;
+        }
 
         clearIm(Row,Col,g);
         if (boardd[Row][Col] == 0 ) {
