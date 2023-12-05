@@ -206,6 +206,9 @@ public class DrawingPanel extends VBox{
         if(AutoOn) {
             autoDraw();
         }
+        else{
+            clearDraw();
+        }
 
     }
 
@@ -253,12 +256,9 @@ public class DrawingPanel extends VBox{
         HBox hbox1= new HBox(50);
         HBox hbox2 = new HBox(10);
 
-        Label time = new Label("Time");
-        Label Ftime = new Label("Fastest Time");
-        Button TimeSl = new Button("Time solve");
+
         Button Reset = new Button("Reset");
-        hbox1.getChildren().addAll(time, Ftime);
-        hbox2.getChildren().addAll(TimeSl, Reset);
+        hbox2.getChildren().addAll(Reset);
         this.getChildren().addAll(hbox1, this.canvas, hbox2);
 
         this.canvas.setOnMouseClicked( e -> mouseClicked(e));
@@ -288,6 +288,19 @@ public class DrawingPanel extends VBox{
                         drawDot(row, col, g);
                         boardd[row][col] = 2;
                     }
+            }
+        }
+    }
+
+    private void clearDraw(){
+        for (int row = 0; row < 10; row++) {
+            for (int col = 0; col < 10; col++) {
+                if(boardd[row][col] != 1) {
+                    if (userPuzzle.vaildStar(col, row)) {
+                        clearIm(row, col, g);
+                        boardd[row][col] = 0;
+                    }
+                }
             }
         }
     }
