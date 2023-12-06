@@ -51,5 +51,5 @@ use the green arrow.  To execute using Gradle run:
 
 * Puzzles button Scene:  This scene has buttons of the levels of puzzle you have completed, and has the button of the puzzle you are currently solving. Clicking any of these buttons will take you to the puzzle but it wouldn’t affect the user level. There is also a Menu button to take you back to the menu scene.
 
-
+* Old User: if you are an old User you should change the User.txt file to have your old UserID.
 
