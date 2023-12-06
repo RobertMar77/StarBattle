@@ -3,7 +3,6 @@ package starb.client;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.*;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
@@ -49,7 +48,6 @@ public class ServerClient {
             while(scanner.hasNextLine()){
                 UserID=scanner.nextLine();
             }
-//            System.out.println("read: "+ UserID);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -59,22 +57,17 @@ public class ServerClient {
             HttpURLConnection connection;
             URL url = new URL(baseUrl+"users/"+ UserID);
             connection = (HttpURLConnection) url.openConnection();
-            // Set the request method to GET
             connection.setRequestMethod("GET");
 
             // Get the response code
             int responseCode = connection.getResponseCode();
-            System.out.println("Response Code: " + responseCode);
 
-            // Read the response content if needed
             if (responseCode != HttpURLConnection.HTTP_OK) {
                 UserID = "";   //incorrect UserID
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-//        System.out.println("User ID: "+UserID);
 
         return UserID;
     }
@@ -89,18 +82,13 @@ public class ServerClient {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        System.out.println("Post User ID: "+UserID);
 
         return UserID;
     }
 
 
-
-
-    //stuff below not all working
     public int getUserLevel(String UserID) {
         ResponseEntity<Integer> response = restTemplate.getForEntity(baseUrl + "users/" + UserID + "/level", int.class);
-        System.out.print(response.getBody());
         return response.getBody();
     }
 
@@ -148,6 +136,12 @@ public class ServerClient {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    public String getTitle(String UserID) {
+        ResponseEntity<String> response = restTemplate.getForEntity(baseUrl + "users/" + UserID + "/title", String.class);
+        return response.getBody();
     }
 
 }
