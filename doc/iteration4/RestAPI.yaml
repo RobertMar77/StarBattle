@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title:  Star Battle Rest API
   description: |-
-    This is a API documentation of out Star Battle Game and if you use these endpoints while the server is running you will be able to see all the puzzle data. Our user side of the database is not set up with seed data so the endpoints won't retrieve user data, but everythin else works.
+    This is a API documentation of out Star Battle Game and if you use these endpoints while the server is running you will be able to see all the puzzle data. It returns client friendly arrays and integers/Strings for the responses.
 
   version: 1.0.11
 servers:
@@ -42,8 +42,8 @@ paths:
               $ref: '#/components/schemas/Puzzle'
         required: true
       responses:
-        '200':
-          description: Successful operation
+        '201':
+          description: Create a New Puzzle
           content:
             application/json:
               schema:
@@ -73,8 +73,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Puzzle'
-        '400':
-          description: Invalid ID supplied
+        '404':
+          description: ID Not Found in Server
 
   /puzzles/{id}/layout:
     get:
@@ -98,14 +98,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Layout'
-        '400':
-          description: Invalid ID supplied
+        '404':
+          description: ID Not Found in Server
 
   /puzzles/{id}/answer:
     get:
       tags:
         - puzzles
-      summary: Find purchase order by ID
+      summary: Find puzzle answers by ID
       description: For valid response try integer IDs with value >= 1 and <= 24. Other values will generate exceptions.
       operationId: getAnswer
       parameters:
@@ -123,8 +123,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Answer'
-        '400':
-          description: Invalid ID supplied
+        '404':
+          description: ID Not Found in Server
 
 
 
@@ -163,8 +163,8 @@ paths:
               $ref: '#/components/schemas/User'
 
       responses:
-        default:
-          description: successful operation
+        '201':
+          description: Create New User
           content:
             application/json:
               schema:
@@ -175,13 +175,13 @@ paths:
     get:
       tags:
         - users
-      summary: User by userId
-      description: For valid response must be a current User ID. Other values will generate exceptions. The current user will have their id saved in a file for future use and for calling their user data from the server.
+      summary: Find User by userId
+      description: For valid response must be a current User ID. Other values will generate exceptions. The current user will have their id saved in a file for future use and for calling their user data from the server. This endpoint is only used by the client to see if it exists. It returns the user object.
       operationId: getUserById
       parameters:
         - name: userId
           in: path
-          description: ID of order that needs to be fetched
+          description: ID of User that needs to be fetched
           required: true
           schema:
             type: integer
@@ -196,9 +196,144 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/User'
-        '400':
-          description: Invalid ID supplied
+        '404':
+          description: userId Not Found in Server
 
+
+
+  /users/{userId}/level:
+    get:
+      tags:
+        - users
+      summary: Get User Level by userId
+      description: Finds the levels solved by the user with the selected userId.
+      operationId: getLevelById
+      parameters:
+        - name: userId
+          in: path
+          description: ID of User whose level needs to be fetched
+          required: true
+          schema:
+            type: integer
+            format: int64
+
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Level'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Level'
+        '404':
+          description: userId Not Found in Server
+    patch:
+      tags:
+        - users
+      summary: Set User Level by userId
+      description: Sets the levels solved by the user with the selected userId.
+      operationId: setLevelById
+      parameters:
+        - name: userId
+          in: path
+          description: ID of User whose level needs to be fetched
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Use a json that holds a desired level.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Level'
+      responses:
+        '204':
+          description: successful operation with No Content
+
+        '404':
+          description: userId Not Found in Server
+
+
+  /users/{userId}/solved:
+    get:
+      tags:
+        - users
+      summary: Finds Puzzles solved by User with the selected userId
+      description: Finds the Puzzles solved by the user with the selected userId.
+      operationId: getSolvedById
+      parameters:
+        - name: userId
+          in: path
+          description: ID of User whose Puzzles solved needs to be fetched
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Solved'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Solved'
+        '404':
+          description: userId Not Found in Server
+
+
+    patch:
+      tags:
+        - users
+      summary: Add one to Puzzles solved by users by userId
+      description: Adds one to Puzzles solved by the selected User.
+      operationId: addSolvedById
+      parameters:
+        - name: userId
+          in: path
+          description: ID of User whose Puzzles solved needs to be fetched
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: successful operation with No Content
+        '404':
+          description: userId Not Found in Server
+
+
+  /users/{userId}/title:
+    get:
+      tags:
+        - users
+      summary: Find a user's Title by userId
+      description: Find a user's Title by userId.
+      operationId: getTitleById
+      parameters:
+        - name: userId
+          in: path
+          description: ID of User whose title needs to be fetched
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Title'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Title'
+        '404':
+          description: userId Not Found in Server
 
 
 
@@ -326,9 +461,21 @@ components:
         id:
           type: integer
           format: int64
+        levelsSolved:
+          type: integer
+          format: int64
+        puzzlesSolved:
+          type: integer
+          format: int64
+        Title:
+          type: string
 
       example:
-        {id: 18380102}
+        { id: 18380102,
+          levelsSolved: 0,
+          puzzlesSolved: 0,
+          String title: "Noob"
+        }
 
     Users:
       type: array
@@ -336,5 +483,45 @@ components:
         type: integer
 
       example:
-        - {id: 18380102}
-        - {id: 13804305}
+        - { id: 18380102,
+            levelsSolved: 0,
+            puzzlesSolved: 0,
+            String title: "New Player"
+        }
+        - { id: 18980103,
+            levelsSolved: 10,
+            puzzlesSolved: 10,
+            String title: "Noob"
+        }
+
+    Level:
+      properties:
+        levelsSolved:
+          type: integer
+          format: int64
+
+      example:
+        {
+          levelsSolved: 0
+        }
+
+    Solved:
+      properties:
+        levelsSolved:
+          type: integer
+          format: int64
+
+      example:
+        {
+          puzzlesSolved: 0
+        }
+
+    Title:
+      properties:
+        title:
+          type: string
+
+      example:
+        {
+          title: "Noob"
+        }
