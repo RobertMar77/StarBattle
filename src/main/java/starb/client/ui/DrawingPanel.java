@@ -29,7 +29,7 @@ public class DrawingPanel extends VBox{
     private Canvas canvas;
     private GraphicsContext g;
     public int[][] boardd;
-   // private final FakeServ serv = new FakeServ();
+
     private ServerClient serv = new ServerClient();
     private int[][] layout;
     private Puzzle userPuzzle;
@@ -52,21 +52,7 @@ public class DrawingPanel extends VBox{
         setupCanvas();
         drawGrid();
         drawLayout();
-        System.out.println("UserID: "+ UserID);
 
-
-
-        //test methods uncomment to test these
-
-//        serv.setUserLevel(UserID, 3);
-//        System.out.println("Level: "+serv.getUserLevel(UserID));
-//        serv.setUserLevel(UserID, 2);
-//        System.out.println("Level: "+serv.getUserLevel(UserID));
-//        System.out.println("Solved: "+serv.getUserSolved(UserID));
-//        serv.addSolved(UserID);
-//        System.out.println("Solved: "+serv.getUserSolved(UserID));
-
-        //serv.setUserLevel(UserID, 1);
     }
 
     private void drawLayout() {
@@ -188,8 +174,6 @@ public class DrawingPanel extends VBox{
         int Col = (int) ((X - gridUpperLeft.getX()) / 40);
 
         if (Row < 0 || Row >= rows || Col < 0 || Col >= cols) {
-            System.out.println(Row);
-            System.out.println(Col);
             return;
         }
 
@@ -212,9 +196,7 @@ public class DrawingPanel extends VBox{
         if(AutoOn) {
             autoDraw();
         }
-        else{
-            clearDraw();
-        }
+
 
     }
 

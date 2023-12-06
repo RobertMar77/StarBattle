@@ -37,7 +37,6 @@ public class SolutionScene extends VBox {
 //        serv.setUserLevel(UserID, 24);       //2 & 4 & 12 & 13 & 23  Don't work
 
         this.userLevel = userLevel;
-        System.out.println("Level: "+ userLevel);
         this.layout = this.serv.getLayout(userLevel);
         int[][] answer = this.serv.getAnswer(userLevel);
         this.userPuzzle = new Puzzle(answer, this.layout);
@@ -81,9 +80,9 @@ public class SolutionScene extends VBox {
                 if(answer[j][i]==1){
                     drawStar(j,i,g);
                 }
-                System.out.print(answer[i][j]);             //print solution taken from server
+                           //print solution taken from server
             }
-            System.out.println();
+
         }
         g.closePath();
         g.stroke();
