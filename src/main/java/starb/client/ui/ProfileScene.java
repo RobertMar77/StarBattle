@@ -20,22 +20,20 @@ public class ProfileScene extends VBox {
     private String UserID = serv.getUserID();
 
     /*
-     * Makes the scene for the Profile which has a button to return to the menu.
+     * Makes the scene for the Profile which has a button to return to the menu scene expands if you full screen it.
      */
     public ProfileScene(){
         this.setAlignment(Pos.CENTER);
 
         Text GlobalID = new Text("Global ID: "+serv.getUserID());
-        Text Title = new Text("Rank: " + "(Current Rank)");
+        Text Title = new Text("Rank: " + serv.getTitle(UserID));
         Text levelsSolved = new Text("Levels Solved: " + serv.getUserLevel(UserID));
         Text puzzSolved = new Text("Puzzles Solved: " + serv.getUserSolved(UserID));
-        Text minSolvTime = new Text("Min Solve Time: " + "00:00");
-        Text avgSolvTime = new Text("Avg Solve Time: " + "00:00");
 
         Button Menu = new Button("Menu");
         ProfileScene.setMargin(Menu, new Insets(10, 10, 10, 10));
 
-        // Bind font size to scene width
+        // Bind font size to scene width so it expands if you expand the screen
         double fontSizeMultiplier = 0.04;
         GlobalID.fontProperty().bind(Bindings.createObjectBinding(
                 () -> Font.font("Arial", primaryStage.getWidth() * fontSizeMultiplier),
@@ -50,11 +48,9 @@ public class ProfileScene extends VBox {
         Menu.fontProperty().bind(GlobalID.fontProperty());
         levelsSolved.fontProperty().bind(Title.fontProperty());
         puzzSolved.fontProperty().bind(Title.fontProperty());
-        minSolvTime.fontProperty().bind(Title.fontProperty());
-        avgSolvTime.fontProperty().bind(Title.fontProperty());
 
 
-        this.getChildren().addAll(GlobalID, Title, levelsSolved, puzzSolved, minSolvTime, avgSolvTime, Menu);
+        this.getChildren().addAll(GlobalID, Title, levelsSolved, puzzSolved, Menu);
         Menu.setOnAction(e -> {
             Scene newScene = new Scene(new MenuScene());
             primaryStage.setScene(newScene);
