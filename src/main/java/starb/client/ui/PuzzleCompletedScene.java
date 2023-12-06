@@ -24,6 +24,7 @@ import static starb.client.StarbClient.primaryStage;
 
 public class PuzzleCompletedScene extends VBox{
     private List<Button> levelButtons = new ArrayList<>();
+    private Button menuSec = new Button("Menu");
     private DrawingPanel graphicsPanel;
     private SidePanel sidePanel;
     public PuzzleCompletedScene(int userLevel) {
@@ -37,8 +38,18 @@ public class PuzzleCompletedScene extends VBox{
             hbox.setAlignment(Pos.CENTER);
             this.getChildren().add(hbox);
         }
+        HBox hbox2 = new HBox();
+        hbox2.getChildren().add(menuSec);
+        hbox2.setAlignment(Pos.BOTTOM_RIGHT);
+        this.getChildren().add(hbox2);
+
+        menuSec.setOnAction(e -> {
+            Scene newScene = new Scene(new MenuScene());
+            primaryStage.setScene(newScene);});
 
     }
+
+
 
 
     private Button createLevelButton(int level) {
