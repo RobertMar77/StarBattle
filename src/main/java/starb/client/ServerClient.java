@@ -24,7 +24,7 @@ public class ServerClient {
 
     public ServerClient() {
         this.restTemplate = new RestTemplate();
-        this.baseUrl = "http://localhost:3390/";
+        this.baseUrl = "http://localhost:3391/";
     }
     public int[][] getLayout(int puzzleLevel) {
         ResponseEntity<int[][]> response = restTemplate.getForEntity(baseUrl + "puzzles/" + puzzleLevel + "/layout", int[][].class);
